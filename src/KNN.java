@@ -10,13 +10,24 @@ import weka.core.Instances;
 public class KNN {
 
     public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("ads.txt");
+		BufferedReader datafile = readDataFile("src/ads.txt");
 		Instances data = new Instances(datafile);
+		data.setClassIndex(data.numAttributes() - 1);
+
+        //do not use the first and second
+        Instance first = data.instance(0);
+        Instance second = data.instance(1);
+        data.delete(0);
+        data.delete(1);
+
+        Classifier ibk = new IBk();
+        ibk.buildClassifier(data);
+
+        double class1 = ibk.classifyInstance(first);
+        double class2 = ibk.classifyInstance(second);
+
+        System.out.println("first: " + class1 + "\nsecond: " + class2);
     }
-
-
-
-
 
     // MARK: - Read File
     public static BufferedReader readDataFile(String filename) {
